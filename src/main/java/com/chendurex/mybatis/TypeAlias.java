@@ -51,7 +51,7 @@ public class TypeAlias {
         for (Map.Entry<String, String> entry : fieldMap.entrySet()) {
             String value = fields.get(entry.getKey());
             if (value == null) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("传入的字段[" + entry.getKey() + "]，不存在");
             } else {
                 fields.put(entry.getKey(), entry.getValue());
             }
@@ -64,7 +64,7 @@ public class TypeAlias {
 
     public static void registryField(Class<?> clazz, String... objects) {
         if (objects == null || objects.length == 0 || objects.length % 2 != 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("传入的键值对不匹配");
         }
         for (int i = 0, len = objects.length; i < len;) {
             registryField(clazz, objects[i++], objects[i++]);
@@ -97,7 +97,7 @@ public class TypeAlias {
 
     public static void registryTable(Object... objects) {
         if (objects == null || objects.length == 0 || objects.length % 2 != 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("传入的键值对不匹配");
         }
         for (int i = 0, len = objects.length; i < len;) {
             registryTable(ImmutableMap.<Class<?>, String>of((Class<?>) objects[i++], String.valueOf(objects[i++])));

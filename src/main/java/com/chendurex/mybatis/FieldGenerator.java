@@ -70,9 +70,4 @@ public class FieldGenerator {
                 + Utils.nextLine
                 + ")";
     }
-
-    public static String generatorCondSelectSQL() {
-        return null;
-    }
-
 }
