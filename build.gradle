@@ -1,0 +1,68 @@
+uploadRepoUrl = 'http://nexus.dayhr.com/nexus/content/repositories/releases/'
+
+allprojects  {
+    apply plugin: 'maven'
+    apply plugin: 'java'
+    group = 'com.chendurex'
+    repositories {
+        maven { url "http://nexus.dayhr.com/nexus/content/groups/public/" }
+    }
+}
+
+subprojects {
+    version = '1.0.0'
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
+
+    compileJava {
+        options.encoding = 'utf-8'
+        options.define compilerArgs: [
+                '-source', sourceCompatibility,
+                '-target', targetCompatibility
+        ]
+    }
+
+    sourceSets{
+        main{
+            resources {
+                srcDir 'src/main/java'
+            }
+        }
+    }
+
+    // 生成源码jar包
+    task sourcesJar(type: Jar, dependsOn: [classes]) {
+        classifier = 'sources'
+        from sourceSets.main.java
+        from sourceSets.main.resources
+        manifest = jar.manifest
+    }
+
+    // 打源码包
+    artifacts {
+        archives sourcesJar
+    }
+
+    // 打包jar
+    jar{
+        manifest {
+            attributes 'build-date': new Date().format('yyyy-MM-dd HH:mm:ss')
+        }
+    }
+
+    // 发布到中央仓库
+    uploadArchives {
+        repositories.mavenDeployer {
+            repository(url: uploadRepoUrl) {
+                authentication(userName: "admin", password: "admin123")
+            }
+        }
+    }
+}
+
+dependencies {
+    compile 'org.reflections:reflections:0.9.10'
+    compile 'com.google.guava:guava:19.0'
+    // test
+    testCompile 'junit:junit:4.12'
+}
