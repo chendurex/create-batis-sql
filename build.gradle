@@ -1,4 +1,4 @@
-uploadRepoUrl = 'http://nexus.dayhr.com/nexus/content/repositories/releases/'
+ext.uploadRepoUrl = 'http://nexus.dayhr.com/nexus/content/repositories/releases/'
 
 allprojects  {
     apply plugin: 'maven'
