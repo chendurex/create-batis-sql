@@ -1,15 +1,11 @@
-ext.uploadRepoUrl = 'http://nexus.dayhr.com/nexus/content/repositories/releases/'
-
-allprojects  {
+    ext.uploadRepoUrl = 'http://nexus.dayhr.com/nexus/content/repositories/releases/'
     apply plugin: 'maven'
     apply plugin: 'java'
-    group = 'com.chendurex'
+    group = 'com.chendurex.plugin'
     repositories {
         maven { url "http://nexus.dayhr.com/nexus/content/groups/public/" }
     }
-}
 
-subprojects {
     version = '1.0.0'
     sourceCompatibility = 1.7
     targetCompatibility = 1.7
@@ -58,11 +54,10 @@ subprojects {
             }
         }
     }
-}
 
-dependencies {
-    compile 'org.reflections:reflections:0.9.10'
-    compile 'com.google.guava:guava:19.0'
-    // test
-    testCompile 'junit:junit:4.12'
-}
+    dependencies {
+        compile 'org.reflections:reflections:0.9.10'
+        compile 'com.google.guava:guava:19.0'
+        // test
+        testCompile 'junit:junit:4.12'
+    }
