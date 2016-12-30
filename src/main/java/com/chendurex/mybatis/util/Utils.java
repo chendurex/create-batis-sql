@@ -148,19 +148,40 @@ public class Utils {
         return treeSet;
     }
 
+    /**
+     * 获取当前基类包中所有的类
+     * @param pck
+     * @return
+     */
     public static Set<String> getAllClasses(String pck) {
         Reflections reflections = new Reflections(pck, new SubTypesScanner(false));
         return reflections.getAllTypes();
     }
 
+    /**
+     * 根据类转换为一个文件路径
+     * @param clazz
+     * @return
+     */
     public static String getFilePath(Class<?> clazz) {
         return getFilePath(clazz.getPackage().getName(), clazz.getSimpleName().concat("Const"));
     }
 
+    /**
+     * 根据包名跟类名生成一个文件路径
+     * @param pck
+     * @param name
+     * @return
+     */
     public static String getFilePath(String pck, String name) {
         return getFilePath(pck) + File.separator + name.concat("Const") + ".java";
     }
 
+    /**
+     * 生成一个java工具约定的java文件路径
+     * @param pck
+     * @return
+     */
     public static String getFilePath(String pck) {
         return  System.getProperty("user.dir")
                 + File.separator
@@ -171,5 +192,37 @@ public class Utils {
                 + "java"
                 + File.separator
                 + pck.replace(".", File.separator);
+    }
+
+    /**
+     * java 属性字段转换为一个带条件的判断SQL段
+     * @param field 字段
+     * @param check 是否生成检查字段
+     * @param isCond where条件还是普通条件
+     * @return
+     */
+    public static String javaFieldConvertCondSQL(String field, boolean check , boolean isCond) {
+        return check ? javaFieldConvertCondSQLWithTest(field, isCond) : javaFieldConvertCondSQLWithinTest(field, isCond);
+    }
+
+    private static String javaFieldConvertCondSQLWithTest(String field, boolean isCond) {
+        return "<if"
+                + " test=\""
+                + field
+                + "!=null\""
+                + ">"
+                + Utils.nextSpace
+                + javaFieldConvertCondSQLWithinTest(field, isCond)
+                + Utils.nextLine
+                + "</if>"
+                + Utils.nextLine;
+    }
+
+    private static String javaFieldConvertCondSQLWithinTest(String field, boolean isCond) {
+        return  javaFieldToTableField(field)
+                + " = #{"
+                + field
+                + "}"
+                + (isCond ? " and" : ",");
     }
 }

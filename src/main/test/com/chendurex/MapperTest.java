@@ -1,7 +1,8 @@
 package com.chendurex;
 
-import com.chendurex.mybatis.FieldGenerator;
+import com.chendurex.mybatis.SQLGenerator;
 import com.chendurex.mybatis.TypeAlias;
+import com.chendurex.mybatis.anaotation.Condition;
 import org.junit.Test;
 
 /**
@@ -13,23 +14,23 @@ import org.junit.Test;
 public class MapperTest {
     @Test
     public void testResultMapper() {
-        System.out.println(FieldGenerator.generatorResultMapper(TestBean.class));
+        System.out.println(SQLGenerator.generatorResultMapper(TestBean.class));
     }
 
     @Test
     public void testSelectSQL() {
-        System.out.println(FieldGenerator.generatorSelectSQL(TestBean.class));
+        System.out.println(SQLGenerator.generatorSelectSQL(TestBean.class));
     }
 
     @Test
     public void testInsertSQL() {
-        System.out.println(FieldGenerator.generatorInsertSQL(TestBean.class));
+        System.out.println(SQLGenerator.generatorInsertSQL(TestBean.class));
     }
 
     @Test
     public void testTableAlias() {
         TypeAlias.registryTable(TestBean.class, "test_table");
-        System.out.println(FieldGenerator.generatorSelectSQL(TestBean.class));
+        System.out.println(SQLGenerator.generatorSelectSQL(TestBean.class));
     }
 
     @Test
@@ -38,5 +39,10 @@ public class MapperTest {
         testResultMapper();
         testSelectSQL();
         testInsertSQL();
+    }
+
+    @Test
+    public void testGeneratorCondSQL() {
+        System.out.println(SQLGenerator.generatorCondSQL(TestBean.class, "sys7", "sys8"));
     }
 }

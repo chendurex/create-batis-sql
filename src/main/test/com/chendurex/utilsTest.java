@@ -14,4 +14,9 @@ public class utilsTest {
     public void testGetAllClasses() {
         Utils.getAllClasses("com.chendurex.mybatis.field");
     }
+
+    @Test
+    public void testJavaFieldConvertCondSQL() {
+        System.out.println(Utils.javaFieldConvertCondSQL("dateFrom", true, true));
+    }
 }

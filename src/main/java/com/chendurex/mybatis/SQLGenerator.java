@@ -1,6 +1,8 @@
 package com.chendurex.mybatis;
 
+import com.chendurex.mybatis.anaotation.Condition;
 import com.chendurex.mybatis.util.Utils;
+import com.sun.corba.se.impl.javax.rmi.CORBA.Util;
 
 import java.beans.Introspector;
 import java.lang.reflect.Field;
@@ -12,7 +14,7 @@ import java.util.Set;
  * @pachage com.dayhr.web.module.hr.time.attendance.common
  * @date 2016/11/22 20:16
  */
-public class FieldGenerator {
+public class SQLGenerator {
 
     /**
      * 生成resultMapper文件
@@ -72,4 +74,23 @@ public class FieldGenerator {
                 + Utils.nextLine
                 + ")";
     }
+
+    /**
+     * 生成带条件的SQL
+     * @param clazz
+     * @return
+     */
+    public static String generatorCondSQL(Class<?> clazz, String ... param) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(generatorSelectSQL(clazz))
+                .append(Utils.nextLine)
+                .append("where")
+                .append(Utils.nextLine);
+        for (String p : param) {
+            sb.append(Utils.javaFieldConvertCondSQL(p, true, true));
+        }
+        return sb.toString();
+    }
+
+
 }
