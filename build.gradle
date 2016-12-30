@@ -58,6 +58,7 @@
     dependencies {
         compile 'org.reflections:reflections:0.9.10'
         compile 'com.google.guava:guava:19.0'
+        compile 'commons-io:commons-io:2.4'
         // test
         testCompile 'junit:junit:4.12'
     }

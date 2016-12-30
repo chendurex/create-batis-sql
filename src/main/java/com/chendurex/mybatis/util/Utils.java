@@ -1,11 +1,16 @@
-package com.chendurex.mybatis;
+package com.chendurex.mybatis.util;
 
+import com.chendurex.mybatis.TypeAlias;
 import com.google.common.base.Predicate;
 import org.reflections.ReflectionUtils;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 
 import javax.annotation.Nullable;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.nio.file.Files;
 import java.util.*;
 
 /**
@@ -105,6 +110,15 @@ public class Utils {
         return sb.substring(1);
     }
 
+    /**
+     * 把java properties转换为constant常量
+     * @param field
+     * @return
+     */
+    public static String fieldToConst(String field) {
+        return javaFieldToTableField(field).toUpperCase();
+    }
+
     public static Set<Field> getAllFields(Class<?> clazz) {
         return getAllFields(clazz, Collections.<String>emptyList());
     }
@@ -132,5 +146,30 @@ public class Utils {
         });
         treeSet.addAll(fields);
         return treeSet;
+    }
+
+    public static Set<String> getAllClasses(String pck) {
+        Reflections reflections = new Reflections(pck, new SubTypesScanner(false));
+        return reflections.getAllTypes();
+    }
+
+    public static String getFilePath(Class<?> clazz) {
+        return getFilePath(clazz.getPackage().getName(), clazz.getSimpleName().concat("Const"));
+    }
+
+    public static String getFilePath(String pck, String name) {
+        return getFilePath(pck) + File.separator + name.concat("Const") + ".java";
+    }
+
+    public static String getFilePath(String pck) {
+        return  System.getProperty("user.dir")
+                + File.separator
+                + "src"
+                + File.separator
+                + "main"
+                + File.separator
+                + "java"
+                + File.separator
+                + pck.replace(".", File.separator);
     }
 }

@@ -1,5 +1,7 @@
 package com.chendurex.mybatis;
 
+import com.chendurex.mybatis.util.Utils;
+
 import java.beans.Introspector;
 import java.lang.reflect.Field;
 import java.util.Set;

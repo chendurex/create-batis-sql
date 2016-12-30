@@ -1,5 +1,6 @@
 package com.chendurex.mybatis;
 
+import com.chendurex.mybatis.util.Utils;
 import com.google.common.collect.ImmutableMap;
 
 import java.lang.reflect.Field;
