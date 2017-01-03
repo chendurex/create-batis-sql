@@ -6,11 +6,10 @@ import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
-import javax.annotation.Nullable;
 import java.io.File;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.nio.file.Files;
 import java.util.*;
 
 /**
@@ -148,14 +147,18 @@ public class Utils {
         return treeSet;
     }
 
-    /**
-     * 获取当前基类包中所有的类
-     * @param pck
-     * @return
-     */
-    public static Set<String> getAllClasses(String pck) {
-        Reflections reflections = new Reflections(pck, new SubTypesScanner(false));
-        return reflections.getAllTypes();
+    public static Set<Class<?>> getAllClasses(String pck) {
+        Reflections reflections = new Reflections(pck);
+        Set<Class<?>> classes = new HashSet<>();
+        Set<Class<?>> scanClz = TypeAlias.getScanClass();
+        if (scanClz.isEmpty()) {
+            classes.addAll(reflections.getSubTypesOf(Serializable.class));
+        } else {
+            for (Class<?> sub : scanClz) {
+                classes.addAll(reflections.getSubTypesOf(sub));
+            }
+        }
+        return classes;
     }
 
     /**
@@ -197,16 +200,18 @@ public class Utils {
     /**
      * java 属性字段转换为一个带条件的判断SQL段
      * @param field 字段
-     * @param check 是否生成检查字段
-     * @param isCond where条件还是普通条件
      * @return
      */
-    public static String javaFieldConvertCondSQL(String field, boolean check , boolean isCond) {
-        return check ? javaFieldConvertCondSQLWithTest(field, isCond) : javaFieldConvertCondSQLWithinTest(field, isCond);
+    public static String javaFieldConvertCondSQL(String field) {
+        return javaFieldConvertWhereSQLWithTest(field, true);
     }
 
-    private static String javaFieldConvertCondSQLWithTest(String field, boolean isCond) {
-        return "<if"
+    public static String javaFieldConvertUpdateSQL(String field) {
+        return javaFieldConvertWhereSQLWithTest(field, false);
+    }
+
+    private static String javaFieldConvertWhereSQLWithTest(String field, boolean isCond) {
+        return "  <if"
                 + " test=\""
                 + field
                 + "!=null\""
@@ -214,7 +219,7 @@ public class Utils {
                 + Utils.nextSpace
                 + javaFieldConvertCondSQLWithinTest(field, isCond)
                 + Utils.nextLine
-                + "</if>"
+                + "  </if>"
                 + Utils.nextLine;
     }
 

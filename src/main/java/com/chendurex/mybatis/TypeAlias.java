@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,6 +18,7 @@ import java.util.Set;
 public class TypeAlias {
     private static final Map<Class<?>, String> tableAlias = new HashMap<>();
     private static final Map<Class<?>, Map<String, String>> fieldAlias = new HashMap<>();
+    private static final Set<Class<?>> scanBaseClz = new HashSet<>();
 
     /**
      * 获取表名
@@ -37,6 +39,10 @@ public class TypeAlias {
      */
     public static String getField(Class<?> clazz, String name) {
         return fieldAlias.get(clazz) == null ? Utils.javaFieldToTableField(name) : fieldAlias.get(clazz).get(name);
+    }
+
+    public static Set<Class<?>> getScanClass() {
+        return scanBaseClz;
     }
 
     /**
@@ -102,6 +108,12 @@ public class TypeAlias {
         }
         for (int i = 0, len = objects.length; i < len;) {
             registryTable(ImmutableMap.<Class<?>, String>of((Class<?>) objects[i++], String.valueOf(objects[i++])));
+        }
+    }
+
+    public static void registryScanBaseClass(Class<?>... clz) {
+        for (Class sub : clz) {
+            scanBaseClz.add(sub);
         }
     }
 }

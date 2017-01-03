@@ -1,7 +1,10 @@
 package com.chendurex;
 
+import com.chendurex.mybatis.TypeAlias;
 import com.chendurex.mybatis.field.ProConstGenerator;
 import org.junit.Test;
+
+import java.io.Serializable;
 
 /**
  * @author chen
@@ -32,6 +35,8 @@ public class ProConstGeneratorTest {
 
     @Test
     public void testWriteBasePackage() {
+        TypeAlias.registryScanBaseClass(ProConstGenerator.class);
+        TypeAlias.registryScanBaseClass(Serializable.class);
         ProConstGenerator.write("com.chendurex.mybatis.field.TTT", "com.chendurex.mybatis.field");
     }
 

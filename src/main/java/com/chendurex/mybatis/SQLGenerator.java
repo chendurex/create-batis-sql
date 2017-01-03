@@ -1,8 +1,6 @@
 package com.chendurex.mybatis;
 
-import com.chendurex.mybatis.anaotation.Condition;
 import com.chendurex.mybatis.util.Utils;
-import com.sun.corba.se.impl.javax.rmi.CORBA.Util;
 
 import java.beans.Introspector;
 import java.lang.reflect.Field;
@@ -75,22 +73,34 @@ public class SQLGenerator {
                 + ")";
     }
 
+    public static String generatorUpdateSQL(Class<?> clz, String ... param) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("update ")
+                .append(TypeAlias.getTable(clz))
+                .append(Utils.nextLine)
+                .append("<set>")
+                .append(Utils.nextLine);
+        for (String p : param) {
+            sb.append(Utils.javaFieldConvertUpdateSQL(p));
+        }
+        return sb.substring(0, sb.lastIndexOf(",")).concat("\r\n  </if>\r\n</set>");
+    }
+
     /**
      * 生成带条件的SQL
      * @param clazz
      * @return
      */
-    public static String generatorCondSQL(Class<?> clazz, String ... param) {
+    public static String generatorWhereSQL(Class<?> clazz, String ... param) {
         StringBuilder sb = new StringBuilder();
         sb.append(generatorSelectSQL(clazz))
                 .append(Utils.nextLine)
                 .append("where")
                 .append(Utils.nextLine);
         for (String p : param) {
-            sb.append(Utils.javaFieldConvertCondSQL(p, true, true));
+            sb.append(Utils.javaFieldConvertCondSQL(p));
         }
-        return sb.toString();
+        return sb.substring(0, sb.lastIndexOf("and")).concat("\r\n</if>");
     }
-
 
 }

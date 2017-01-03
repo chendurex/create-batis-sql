@@ -2,7 +2,6 @@ package com.chendurex;
 
 import com.chendurex.mybatis.SQLGenerator;
 import com.chendurex.mybatis.TypeAlias;
-import com.chendurex.mybatis.anaotation.Condition;
 import org.junit.Test;
 
 /**
@@ -42,7 +41,12 @@ public class MapperTest {
     }
 
     @Test
-    public void testGeneratorCondSQL() {
-        System.out.println(SQLGenerator.generatorCondSQL(TestBean.class, "sys7", "sys8"));
+    public void testGeneratorWhereSQL() {
+        System.out.println(SQLGenerator.generatorWhereSQL(TestBean.class, "sys7", "sys8"));
+    }
+
+    @Test
+    public void testGeneratorUpdateSQL() {
+        System.out.println(SQLGenerator.generatorUpdateSQL(TestBean.class, "sys7", "sys8"));
     }
 }

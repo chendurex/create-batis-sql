@@ -17,6 +17,6 @@ public class utilsTest {
 
     @Test
     public void testJavaFieldConvertCondSQL() {
-        System.out.println(Utils.javaFieldConvertCondSQL("dateFrom", true, true));
+        System.out.println(Utils.javaFieldConvertCondSQL("dateFrom"));
     }
 }

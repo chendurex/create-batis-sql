@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
@@ -58,16 +59,12 @@ public class ProConstGenerator {
      * @return
      */
     public static String create(String pck) {
-        Set<String> allClasses = Utils.getAllClasses(pck);
-        try {
-            StringBuilder sb = new StringBuilder(allClasses.size() * 100);
-            for (String clz : allClasses) {
-                sb.append(create(Class.forName(clz)));
-            }
-            return sb.toString();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        Set<Class<?>> allClasses = Utils.getAllClasses(pck);
+        StringBuilder sb = new StringBuilder(allClasses.size() * 100);
+        for (Class clz : allClasses) {
+            sb.append(create(clz));
         }
+        return sb.toString();
     }
 
     private static String createJavaContent(String pck, String name, String content) {
