@@ -2,9 +2,9 @@ package com.chendurex.mybatis.util;
 
 import com.chendurex.mybatis.TypeAlias;
 import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
 import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
 
 import java.io.File;
 import java.io.Serializable;
@@ -29,11 +29,21 @@ public class Utils {
      * @return
      */
     public static String tableFieldToMapperFiled(String value) {
+        return tableFieldToMapperFiled(value, null);
+    }
+
+    /**
+     * java属性值组装成mapper使用的属性值
+     * @param value 表字段
+     * @param prefix 是否带前缀，一般用于批量导入时需要
+     * @return
+     */
+    public static String tableFieldToMapperFiled(final String value, final String prefix) {
         List<String> fields = Arrays.asList(value.split(","));
         StringBuilder sb = new StringBuilder(value.length());
         int split = SPLIT;
         for (String field : fields) {
-            sb.append("#{").append(field).append("}, ");
+            sb.append("#{").append(Strings.isNullOrEmpty(prefix) ? "" : prefix + ".").append(field).append("}, ");
             if (sb.length() > split) {
                 sb.append(nextSpace);
                 split += SPLIT;

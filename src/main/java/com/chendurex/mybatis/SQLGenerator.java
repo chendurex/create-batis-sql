@@ -73,6 +73,43 @@ public class SQLGenerator {
                 + ")";
     }
 
+    /**
+     * 生成批量插入的SQL
+     * @param clazz
+     * @param param 可选项，如果传入第一个参数则表示集合的标识，第二个参数表示迭代标识
+     * @return
+     */
+    public static String generatorMultiInsertSQL(Class<?> clazz, String ... param) {
+        String source = "list";
+        String prefix = "item";
+        if (param != null && param.length > 0) {
+            source = param[0];
+            if (param.length > 1) {
+                prefix = param[1];
+            }
+        }
+        return  "insert into "
+                + TypeAlias.getTable(clazz)
+                + Utils.nextLine
+                + "("
+                + Utils.nextSpace
+                + Utils.javaFieldToTableField(clazz)
+                + Utils.nextLine
+                + ")"
+                + Utils.nextLine
+                + "values"
+                + Utils.nextLine
+                + "<foreach collection=\"" + source + "\" item=\""+ prefix + "\" separator=\",\">"
+                + Utils.nextLine
+                + "("
+                + Utils.nextSpace
+                + Utils.tableFieldToMapperFiled(Utils.getAllFieldsAndConvert(clazz), prefix)
+                + Utils.nextLine
+                + ")"
+                + Utils.nextLine
+                + "</foreach>";
+    }
+
     public static String generatorUpdateSQL(Class<?> clz, String ... param) {
         StringBuilder sb = new StringBuilder();
         sb.append("update ")

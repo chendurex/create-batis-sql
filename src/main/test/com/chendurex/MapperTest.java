@@ -49,4 +49,9 @@ public class MapperTest {
     public void testGeneratorUpdateSQL() {
         System.out.println(SQLGenerator.generatorUpdateSQL(TestBean.class, "sys7", "sys8"));
     }
+
+    @Test
+    public void testGeneratorMultiInsertSQL() {
+        System.out.println(SQLGenerator.generatorMultiInsertSQL(TestBean.class));
+    }
 }
